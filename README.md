@@ -1,4 +1,4 @@
 rwtss
 =====
 
-R client for WTSS service
+R client for Web Time Series Service (WTSS)

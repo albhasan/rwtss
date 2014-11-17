@@ -9,3 +9,8 @@
 
 # RStudio files
 .Rproj.user/
+.Rproj.user
+
+# Man files
+.Rd
+.Rd~
