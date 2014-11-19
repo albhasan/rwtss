@@ -221,7 +221,7 @@ setMethod("getTimeSeries","WtssClient",
   
   datasets.processed <- data.frame(datasets.processed, stringsAsFactors = FALSE)
   
-  return( list(center_coordinate = list(longitude=items$result$center_coordinate$longitude, latitude=items$result$center_coordinate$latitude), 
+  return( list(center_coordinate = data.frame(longitude=items$result$center_coordinate$longitude, latitude=items$result$center_coordinate$latitude), 
                datasets = data.frame( timeline=as.Date(items$result$timeline), datasets.processed, stringsAsFactors = FALSE)) 
   )
 }
