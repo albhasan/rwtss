@@ -12,8 +12,7 @@
 #' @name WtssClient
 #' @aliases WtssClient-class
 #' @exportClass WtssClient
-#' @author Alber Sanchez
-
+#' @author Victor Maus, Alber Sanchez
 setClass (
   Class = "WtssClient",
   representation = representation(
@@ -57,6 +56,8 @@ setMethod (
 #' @rdname WtssClient
 #' @docType methods
 #' @export
+#' @examples
+#' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
 wtssClient <- function(serverUrl){
   cat ("~~~~~ WtssClient: constructor UF ~~~~~ \n")
   new (Class="WtssClient",serverUrl = serverUrl)
@@ -102,6 +103,9 @@ setMethod("setServerUrl","WtssClient",
 #' @param object A WtssClient object
 #' @docType methods
 #' @export
+#' @examples
+#' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' objlist = listCoverages(obj)
 setGeneric("listCoverages",function(object){standardGeneric ("listCoverages")})
 setMethod("listCoverages","WtssClient",
           function(object){
@@ -131,6 +135,9 @@ setMethod("listCoverages","WtssClient",
 #' @param coverages A character vector of coverage names
 #' @docType methods
 #' @export
+#' @examples
+#' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' objdesc = describeCoverages(obj,"MOD09Q1")
 setGeneric("describeCoverages",function(object,coverages){standardGeneric ("describeCoverages")})
 setMethod("describeCoverages","WtssClient",
           function(object,coverages){
@@ -169,6 +176,11 @@ setMethod("describeCoverages","WtssClient",
 #' @param to A character with the end date in the format yyyy-mm-dd.
 #' @docType methods
 #' @export
+#' @examples
+#' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' objlist = listCoverages(obj)
+#' objdesc = describeCoverages(obj,objlist)
+#' tsAll = getTimeSeries(obj, coverages=objdesc, latitude=-12, longitude=-45, from="2004-01-01", to="2004-05-01")
 setGeneric("getTimeSeries",function(object,coverages,datasets,latitude,longitude,from,to){standardGeneric ("getTimeSeries")})
 setMethod("getTimeSeries","WtssClient",
           function(object,coverages,datasets,latitude,longitude,from,to){
