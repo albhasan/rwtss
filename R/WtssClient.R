@@ -160,13 +160,13 @@ setMethod("describeCoverages","WtssClient",
 
 #' Time series
 #'
-#' @param object A WtssClient object
-#' @param coverages A character vector of coverage names
-#' @param datasets A character vector of datasets names
-#' @param latitude A latitude in WGS84 coordinate system
-#' @param longitude A longitude in WGS84 coordinate system
-#' @param from A character with the start date in the format yyyy-mm-dd
-#' @param to A character with the end date in the format yyyy-mm-dd
+#' @param object Either a WtssClient object or a server URL
+#' @param coverages Either a list of coverages and datasets such as retrieved by describeCoverages() or a character with the coverage name.
+#' @param datasets A character vector of dataset names.
+#' @param latitude A latitude in WGS84 coordinate system.
+#' @param longitude A longitude in WGS84 coordinate system.
+#' @param from A character with the start date in the format yyyy-mm-dd.
+#' @param to A character with the end date in the format yyyy-mm-dd.
 #' @docType methods
 #' @export
 setGeneric("getTimeSeries",function(object,coverages,datasets,latitude,longitude,from,to){standardGeneric ("getTimeSeries")})
@@ -180,22 +180,49 @@ setMethod("getTimeSeries","WtssClient",
 {
   # c) http://www.dpi.inpe.br/wtss/time_series?coverage=MOD09Q1&attributes=red,nir&latitude=-12&longitude=-54&start=2000-02-18&end=2000-03-05
   #    http://www.dpi.inpe.br/mds/mds/query?product=MOD09Q1&datasets=red,nir&latitude=-12&longitude=-54&output_format=json
-  url <- getServerUrl(object)
+  if(missing(object))
+    stop("Missing either a WtssClient object or a server URL.")
+  
+  url <- object
+    
+  if(class(object)=="WtssClient")
+    url <- getServerUrl(object)
+  
+  
   if( length(url) == 1 && nchar(url) > 1 ){
-    out <- lapply(coverages, function(cov){
-      #request <- paste(url,"describe_coverage?name=",cov,"&output_format=json",sep="")
-      request <- paste(url,"query?product=",cov,"&datasets=",paste(datasets, collapse=","),
-                       "&latitude=",latitude,"&longitude=",longitude,
-                       "&start=",from,"&end=",to,"&output_format=json",sep="")
-      items <- fromJSON(try(getURL(request)))
-      if (class(items) == "try-error")
-        return(items)
-      timeseries <- .timeSeriesProcessing(items)
-      return(timeseries)
-    })
-    names(out) <- coverages
-    return(out)
+    if(is.list(coverages)){
+      out <- lapply(names(coverages), function(cov){
+        #request <- paste(url,"describe_coverage?name=",cov,"&output_format=json",sep="")
+        datasets <- coverages[[cov]]
+        request <- paste(url,"query?product=",cov,"&datasets=",paste(datasets, collapse=","),
+                         "&latitude=",latitude,"&longitude=",longitude,
+                         "&start=",from,"&end=",to,"&output_format=json",sep="")
+        items <- fromJSON(try(getURL(request)))
+        if (class(items) == "try-error")
+          return(items)
+        timeseries <- .timeSeriesProcessing(items)
+        return(timeseries)
+      })
+      names(out) <- names(coverages)
+      return(out)
+    } else if( is.character(coverages) && length(coverages)==1 && is.character(datasets)) {
+        #request <- paste(url,"describe_coverage?name=",cov,"&output_format=json",sep="")
+        request <- paste(url,"query?product=",coverages,"&datasets=",paste(datasets, collapse=","),
+                         "&latitude=",latitude,"&longitude=",longitude,
+                         "&start=",from,"&end=",to,"&output_format=json",sep="")
+        items <- fromJSON(try(getURL(request)))
+        if (class(items) == "try-error")
+          return(items)
+        out <- list(.timeSeriesProcessing(items))
+        names(out) <- coverages
+        return(out)
+    } else {
+      stop("Missing either a list of coverages and datasets such as retrieved by describeCoverages()
+           or a character with the coverage name and a character vector of dataset names.")
+    }
   }
+  
+  return(NULL)
 }
 
 
