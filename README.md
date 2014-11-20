@@ -1,13 +1,18 @@
 rwtss
 =====
 
-R client for Web Time Series Service (WTSS)
+R client for Web Time Series Service (WTSS).
+
+
+WTSS is a lightweight web service for handling remote sensing imagery as time series. Through a simple and effective representation for time series, this web service can be easily integrated into free and open source tools such as R, Python and web browser (through JavaScript).
+
+A JavaScript client can be found at <a href="http://github.com/gqueiroz/wtss/">http://github.com/gqueiroz/wtss<a>
 
 
 <h3>Prerequisites:</h3>
 <ul>
 	<li>Internet access.</li>
-	<li>Git.</li>
+	<li><a href="http://git-scm.com/">Git</a>.</li>
 	<li><a href="http://www.r-project.org/">R</a>.</li>
 	<li><a href="http://www.rstudio.com/">Rstudio</a>.</li>
 </ul>
