@@ -11,7 +11,8 @@
 .Rproj.user/
 .Rproj.user
 
-# Man files
+# Man fileis
+man/
 .Rd
 .Rd~
 README.md~

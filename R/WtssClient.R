@@ -19,7 +19,6 @@ setClass (
     serverUrl = "character"
   ),
   validity = function(object){
-    cat("~~~ WtssClient: inspector ~~~ \n")
     if(length(object@serverUrl) != 1){
       stop ("[WtssClient: validation] Invalid server URL.")
     }else{}
@@ -39,7 +38,6 @@ setMethod (
   f="initialize",
   signature="WtssClient",
   definition=function(.Object,serverUrl){
-    cat ("~~~~~ WtssClient: initializator ~~~~~ \n")
     if(!missing(serverUrl)){
       .Object@serverUrl <- serverUrl
       validObject(.Object)
@@ -59,7 +57,6 @@ setMethod (
 #' @examples
 #' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
 wtssClient <- function(serverUrl){
-  cat ("~~~~~ WtssClient: constructor UF ~~~~~ \n")
   new (Class="WtssClient",serverUrl = serverUrl)
 }
 
@@ -115,8 +112,6 @@ setMethod("listCoverages","WtssClient",
 
 .listCoverages <- function(object)
 {
-  # a) http://www.dpi.inpe.br/wtss/list_coverages
-  #    http://www.dpi.inpe.br/mds/mds/product_list?output_format=json
   url <- getServerUrl(object)
   if( length(url) == 1 && nchar(url) > 1 ){
     #request <- paste(url,"list_coverages?output_format=json",sep="")
@@ -147,8 +142,6 @@ setMethod("describeCoverages","WtssClient",
 
 .describeCoverages <- function(object,coverages)
 {
-  # b) http://www.dpi.inpe.br/wtss/describe_coverage?name=MOD09Q1
-  #    http://www.dpi.inpe.br/mds/mds/dataset_list?product=MOD09Q1&output_format=json
   url <- getServerUrl(object)
   if( length(url) == 1 && nchar(url) > 1 ){
     out <- lapply(coverages, function(cov){
@@ -190,8 +183,6 @@ setMethod("getTimeSeries","WtssClient",
 
 .getTimeSeries <- function(object,coverages,datasets,latitude,longitude,from,to)
 {
-  # c) http://www.dpi.inpe.br/wtss/time_series?coverage=MOD09Q1&attributes=red,nir&latitude=-12&longitude=-54&start=2000-02-18&end=2000-03-05
-  #    http://www.dpi.inpe.br/mds/mds/query?product=MOD09Q1&datasets=red,nir&latitude=-12&longitude=-54&output_format=json
   if(missing(object))
     stop("Missing either a WtssClient object or a server URL.")
   
