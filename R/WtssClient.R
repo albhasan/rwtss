@@ -113,10 +113,20 @@ setMethod("listCoverages","WtssClient",
 .listCoverages <- function(object)
 {
   url <- getServerUrl(object)
+  items <- 0
+  class(items) <- "try-error"
+  ce <- 0
   if( length(url) == 1 && nchar(url) > 1 ){
     #request <- paste(url,"list_coverages?output_format=json",sep="")
     request <- paste(url,"product_list?output_format=json",sep="")
-    items <- fromJSON(try(getURL(request)))
+    while(class(items) == "try-error" & ce < 10) {
+      items <- try(fromJSON(try(getURL(request))))
+      ce <- ce + 1
+    }
+    if (class(items) == "try-error"){
+      stop("\n Server connection timeout. Verify the URL or try again later.")
+      return(items)
+    }
     return(unlist(items, use.names = FALSE))
   }
 }
@@ -143,11 +153,22 @@ setMethod("describeCoverages","WtssClient",
 .describeCoverages <- function(object,coverages)
 {
   url <- getServerUrl(object)
+  items <- 0
+  class(items) <- "try-error"
+  ce <- 0
+  
   if( length(url) == 1 && nchar(url) > 1 ){
     out <- lapply(coverages, function(cov){
       #request <- paste(url,"describe_coverage?name=",cov,"&output_format=json",sep="")
       request <- paste(url,"dataset_list?product=",cov,"&output_format=json",sep="")
-      items <- fromJSON(try(getURL(request)))
+      while(class(items) == "try-error" & ce < 10) {
+        items <- try(fromJSON(try(getURL(request))))
+        ce <- ce + 1
+      }
+      if (class(items) == "try-error"){
+        stop("\n Server connection timeout. Verify the URL or try again later.")
+        return(items)
+      }
       return(items$datasets)
     })
     names(out) <- coverages
@@ -207,31 +228,37 @@ setGeneric("getListOfTimeSeries",function(object,coverages,datasets,coordinates,
 setMethod("getListOfTimeSeries","WtssClient",
           function(object,coverages,datasets,coordinates,from,to){
             if( is.data.frame(coordinates) | is.matrix(coordinates))
-              coordinates = lapply(1:dim(coordinates)[1], function(i) coordinates[i,])
+              coordinates <- lapply(1:dim(coordinates)[1], function(i) coordinates[i,])
             if(!is.list(coordinates))
               stop("Missing a list. Please informe a list of longitude latitude coordinates in WGS84 coordinate system.")
 
-            ts.list = lapply(coordinates, function(coords){
-              longitude = coords[1]
-              latitude = coords[2]
-              .getTimeSeries(object,coverages,datasets,longitude,latitude,from,to)
+            out <- lapply(coordinates, function(coords){
+              longitude <- coords[1]
+              latitude <- coords[2]
+              items <- .getTimeSeries(object,coverages,datasets,longitude,latitude,from,to)
+              
             })
-            return(ts.list)
+            return(out)
           }
 )
 
 .getTimeSeries <- function(object,coverages,datasets,longitude,latitude,from,to)
 {
+  
   if(missing(object))
     stop("Missing either a WtssClient object or a server URL.")
+  
+  items <- 0
+  class(items) <- "try-error"
+  ce <- 0
   
   url <- object
     
   if(class(object)=="WtssClient")
     url <- getServerUrl(object)
   
-  
   if( length(url) == 1 && nchar(url) > 1 ){
+
     if(is.list(coverages)){
       out <- lapply(names(coverages), function(cov){
         #request <- paste(url,"describe_coverage?name=",cov,"&output_format=json",sep="")
@@ -239,9 +266,14 @@ setMethod("getListOfTimeSeries","WtssClient",
         request <- paste(url,"query?product=",cov,"&datasets=",paste(datasets, collapse=","),
                          "&latitude=",latitude,"&longitude=",longitude,
                          "&start=",from,"&end=",to,"&output_format=json",sep="")
-        items <- fromJSON(try(getURL(request)))
-        if (class(items) == "try-error")
+        while(class(items) == "try-error" & ce < 10) {
+          items <- try(fromJSON(try(getURL(request))))
+          ce <- ce + 1
+        }
+        if (class(items) == "try-error"){
+          stop("\n Server connection timeout. Verify the URL or try again later.")
           return(items)
+        }
         timeseries <- .timeSeriesProcessing(items)
         return(timeseries)
       })
@@ -252,9 +284,15 @@ setMethod("getListOfTimeSeries","WtssClient",
         request <- paste(url,"query?product=",coverages,"&datasets=",paste(datasets, collapse=","),
                          "&latitude=",latitude,"&longitude=",longitude,
                          "&start=",from,"&end=",to,"&output_format=json",sep="")
-        items <- fromJSON(try(getURL(request)))
-        if (class(items) == "try-error")
+        while(class(items) == "try-error" & ce < 10) {
+          items <- try(fromJSON(try(getURL(request))))
+          ce <- ce + 1
+        }
+        if (class(items) == "try-error"){
+          stop("\n Server connection timeout. Verify the URL or try again later.")
           return(items)
+        }
+          
         out <- list(.timeSeriesProcessing(items))
         names(out) <- coverages
         return(out)

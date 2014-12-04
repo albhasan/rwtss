@@ -15,6 +15,6 @@ tsAll = getTimeSeries(obj, coverages=objdesc, longitude=-45, latitude=-12, from=
 
 obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
 coordinates = list( c(longitude=-45, latitude=-12),  c(longitude=-54, latitude=-11))
-tsAll = getListOfTimeSeries(obj, coverages="MOD09Q1", datasets="evi2", coordinates=coordinates, from="2004-01-01", to="2004-05-01")
+tsAll = getListOfTimeSeries(obj, coverages="MOD09Q1", datasets="red", coordinates=coordinates, from="2004-01-01", to="2004-05-01")
 
 print("Ok!")
