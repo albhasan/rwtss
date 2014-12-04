@@ -158,13 +158,15 @@ setMethod("describeCoverages","WtssClient",
 
 
 
-#' Time series
+#' Get time series
 #'
+#' @description This function retrieves the time series for a pair of coordinates.
+#' 
 #' @param object Either a WtssClient object or a server URL
 #' @param coverages Either a list of coverages and datasets such as retrieved by describeCoverages() or a character with the coverage name.
 #' @param datasets A character vector of dataset names.
-#' @param latitude A latitude in WGS84 coordinate system.
 #' @param longitude A longitude in WGS84 coordinate system.
+#' @param latitude A latitude in WGS84 coordinate system.
 #' @param from A character with the start date in the format yyyy-mm-dd.
 #' @param to A character with the end date in the format yyyy-mm-dd.
 #' @docType methods
@@ -173,15 +175,52 @@ setMethod("describeCoverages","WtssClient",
 #' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
 #' objlist = listCoverages(obj)
 #' objdesc = describeCoverages(obj,objlist)
-#' tsAll = getTimeSeries(obj, coverages=objdesc, latitude=-12, longitude=-45, from="2004-01-01", to="2004-05-01")
-setGeneric("getTimeSeries",function(object,coverages,datasets,latitude,longitude,from,to){standardGeneric ("getTimeSeries")})
+#' tsAll = getTimeSeries(obj, coverages=objdesc, longitude=-45, latitude=-12, from="2004-01-01", to="2004-05-01")
+setGeneric("getTimeSeries",function(object,coverages,datasets,longitude,latitude,from,to){standardGeneric ("getTimeSeries")})
 setMethod("getTimeSeries","WtssClient",
-          function(object,coverages,datasets,latitude,longitude,from,to){
-            .getTimeSeries(object,coverages,datasets,latitude,longitude,from,to)
+          function(object,coverages,datasets,longitude,latitude,from,to){
+            .getTimeSeries(object,coverages,datasets,longitude,latitude,from,to)
           }
 )
 
-.getTimeSeries <- function(object,coverages,datasets,latitude,longitude,from,to)
+#' Get list of time series
+#'
+#' @description This function retrieves the time series for a list of coordinates.
+#'
+#' @param object Either a WtssClient object or a server URL
+#' @param coverages Either a list of coverages and datasets such as retrieved by
+#' describeCoverages() or a character with the coverage name.
+#' @param datasets A character vector of dataset names.
+#' @param coordinates A list or data frame of longitude latitude coordinates 
+#' in WGS84 coordinate system.
+#' @param from A character with the start date in the format yyyy-mm-dd.
+#' @param to A character with the end date in the format yyyy-mm-dd.
+#' @docType methods
+#' @export
+#' @examples
+#' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' objlist = listCoverages(obj)
+#' objdesc = describeCoverages(obj,objlist)
+#' coordinates = list( c(longitude=-45, latitude=-12),  c(longitude=-54, latitude=-11))
+#' tsAll = getListOfTimeSeries(obj, coverages=objdesc, coordinates=coordinates, from="2004-01-01", to="2004-05-01")
+setGeneric("getListOfTimeSeries",function(object,coverages,datasets,coordinates,from,to){standardGeneric ("getListOfTimeSeries")})
+setMethod("getListOfTimeSeries","WtssClient",
+          function(object,coverages,datasets,coordinates,from,to){
+            if( is.data.frame(coordinates) | is.matrix(coordinates))
+              coordinates = lapply(1:dim(coordinates)[1], function(i) coordinates[i,])
+            if(!is.list(coordinates))
+              stop("Missing a list. Please informe a list of longitude latitude coordinates in WGS84 coordinate system.")
+
+            ts.list = lapply(coordinates, function(coords){
+              longitude = coords[1]
+              latitude = coords[2]
+              .getTimeSeries(object,coverages,datasets,longitude,latitude,from,to)
+            })
+            return(ts.list)
+          }
+)
+
+.getTimeSeries <- function(object,coverages,datasets,longitude,latitude,from,to)
 {
   if(missing(object))
     stop("Missing either a WtssClient object or a server URL.")
