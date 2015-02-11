@@ -27,6 +27,17 @@ A JavaScript client can be found at <a href="http://github.com/gqueiroz/wtss/">h
 	<li>Load the rwtss package <code>library(rwtss)</code></li>
 </ol>
 
+
+<h3>Usage examples:</h3>
+<ol>
+	<li>Create a connection <code>obj = wtssClient("http://www.dpi.inpe.br/mds/mds")</code></li>
+	<li>Get the list of products provided by the service <code>objlist = listCoverages(obj)</code></li>
+	<li>Get the description of an specific product <code>objdesc = describeCoverages(obj,"MOD09Q1")</code></li>
+	<li>Get a time series <code>ts1 = getTimeSeries(obj, coverages="MOD09Q1", datasets=c("nir","quality","red","evi2"), latitude=-12, longitude=-45, from="2004-01-01", to="2004-05-01")</code></li>
+</ol>
+
+
+
 <h3>To build the package:</h3>
 <ol>
 	<li>Clone the project: <code>git clone https//github.com/albhasan/rwtss.git</code>.</li>
