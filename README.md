@@ -18,7 +18,16 @@ A JavaScript client can be found at <a href="http://github.com/gqueiroz/wtss/">h
 </ul>
 
 
-<h3>Instructions:</h3>
+<h3>To use the package:</h3>
+<ol>
+	<li>Open RStudio</li>
+	<li>Install devtools <code>install.packages("devtools")</code></li>
+	<li>Load devtools <code>library(devtools)</code></li>
+	<li>Install the rwtss package <code>install_github("albhasan/rwtss")</code></li>
+	<li>Load the rwtss package <code>library(rwtss)</code></li>
+</ol>
+
+<h3>To build the package:</h3>
 <ol>
 	<li>Clone the project: <code>git clone https//github.com/albhasan/rwtss.git</code>.</li>
 	<li>Open Rstudio, go to File - Open Project and pick the file <code>rwtss.Rproj</code>.</li>
