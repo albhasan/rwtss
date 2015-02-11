@@ -24,12 +24,12 @@ A JavaScript client can be found at <a href="http://github.com/gqueiroz/wtss/">h
 	<li>Install devtools <code>install.packages("devtools")</code></li>
 	<li>Load devtools <code>library(devtools)</code></li>
 	<li>Install the rwtss package <code>install_github("albhasan/rwtss")</code></li>
-	<li>Load the rwtss package <code>library(rwtss)</code></li>
 </ol>
 
 
 <h3>Usage examples:</h3>
 <ol>
+	<li>Load the rwtss package <code>library(rwtss)</code></li>
 	<li>Create a connection <code>obj = wtssClient("http://www.dpi.inpe.br/mds/mds")</code></li>
 	<li>Get the list of products provided by the service <code>objlist = listCoverages(obj)</code></li>
 	<li>Get the description of an specific product <code>objdesc = describeCoverages(obj,"MOD09Q1")</code></li>
