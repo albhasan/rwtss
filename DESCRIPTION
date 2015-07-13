@@ -1,9 +1,9 @@
 Package: rwtss
 Type: Package
-Title: R client for WTSS.
+Title: R client for WTSS
 Version: 0.1.1
 Date: 2014-11-17
-Authors@R: c(person("Victor", "Maus", role = c("aut", "cre"),email
+Authors@R: c(person("Victor", "Maus", role = c("aut"),email
     ="vwmaus1@gmail.com"), person("Alber", "Sanchez", role = c("aut",
     "cre"),email ="albhasan@gmail.com"))
 Author: Alber Sanchez, Victor Maus
