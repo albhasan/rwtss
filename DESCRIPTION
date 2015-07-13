@@ -9,8 +9,8 @@ Authors@R: c(person("Victor", "Maus", role = c("aut"),email
 Author: Alber Sanchez, Victor Maus
 Maintainer: Alber Sanchez <albhasan@gmail.com>
 Description: R client for the Web Time Series Service (WTSS).
-Depends:
-    R (>= 3.0.0),
+Depends: R (>= 3.0.0)
+Imports:
     methods,
     roxygen2,
     RCurl,

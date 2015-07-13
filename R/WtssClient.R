@@ -13,6 +13,10 @@
 #' @aliases WtssClient-class
 #' @exportClass WtssClient
 #' @author Victor Maus, Alber Sanchez
+#' @import rjson
+#' @import RCurl
+#' @import methods
+#' @import roxygen2
 setClass (
   Class = "WtssClient",
   representation = representation(
