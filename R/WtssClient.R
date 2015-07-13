@@ -17,6 +17,7 @@
 #' @import RCurl
 #' @import methods
 #' @import roxygen2
+#' @import testthat
 setClass (
   Class = "WtssClient",
   representation = representation(
@@ -75,6 +76,7 @@ wtssClient <- function(serverUrl){
 #'
 #' @param object A WtssClient object
 #' @docType methods
+#' @aliases getServerUrl-generic
 #' @export
 setGeneric("getServerUrl",function(object){standardGeneric ("getServerUrl")})
 setMethod("getServerUrl","WtssClient",
