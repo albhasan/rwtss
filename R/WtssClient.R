@@ -79,6 +79,8 @@ wtssClient <- function(serverUrl){
 #' @aliases getServerUrl-generic
 #' @export
 setGeneric("getServerUrl",function(object){standardGeneric ("getServerUrl")})
+
+#' @rdname getServerUrl
 setMethod("getServerUrl","WtssClient",
           function(object){
             if(substr(object@serverUrl,nchar(object@serverUrl),nchar(object@serverUrl))!="/")
@@ -94,6 +96,8 @@ setMethod("getServerUrl","WtssClient",
 #' @docType methods
 #' @export
 setGeneric("setServerUrl",function(object, aServerUrl){standardGeneric ("setServerUrl")})
+
+#' @rdname  setServerUrl
 setMethod("setServerUrl","WtssClient",
           function(object, aServerUrl){
             object@serverUrl <- aServerUrl
@@ -110,6 +114,8 @@ setMethod("setServerUrl","WtssClient",
 #' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
 #' objlist = listCoverages(obj)
 setGeneric("listCoverages",function(object){standardGeneric ("listCoverages")})
+
+#' @rdname  listCoverages
 setMethod("listCoverages","WtssClient",
           function(object){
             .listCoverages(object) 
@@ -149,7 +155,10 @@ setMethod("listCoverages","WtssClient",
 #' @examples
 #' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
 #' objdesc = describeCoverages(obj,"MOD09Q1")
-setGeneric("describeCoverages",function(object,coverages){standardGeneric ("describeCoverages")})
+setGeneric("describeCoverages",function(object,coverages){standardGeneric("describeCoverages")})
+
+
+#' @rdname  describeCoverages
 setMethod("describeCoverages","WtssClient",
           function(object,coverages){
             .describeCoverages(object,coverages) 
@@ -203,7 +212,9 @@ setMethod("describeCoverages","WtssClient",
 #' objlist = listCoverages(obj)
 #' objdesc = describeCoverages(obj,objlist)
 #' tsAll = getTimeSeries(obj, coverages=objdesc, longitude=-45, latitude=-12, from="2004-01-01", to="2004-05-01")
-setGeneric("getTimeSeries",function(object,coverages,datasets,longitude,latitude,from,to){standardGeneric ("getTimeSeries")})
+setGeneric("getTimeSeries",function(object,coverages,datasets,longitude,latitude,from,to){standardGeneric("getTimeSeries")})
+
+#' @rdname  getTimeSeries
 setMethod("getTimeSeries","WtssClient",
           function(object,coverages,datasets,longitude,latitude,from,to){
             .getTimeSeries(object,coverages,datasets,longitude,latitude,from,to)
@@ -215,11 +226,9 @@ setMethod("getTimeSeries","WtssClient",
 #' @description This function retrieves the time series for a list of coordinates.
 #'
 #' @param object Either a WtssClient object or a server URL
-#' @param coverages Either a list of coverages and datasets such as retrieved by
-#' describeCoverages() or a character with the coverage name.
+#' @param coverages Either a list of coverages and datasets such as retrieved by describeCoverages() or a character with the coverage name.
 #' @param datasets A character vector of dataset names.
-#' @param coordinates A list or data frame of longitude latitude coordinates 
-#' in WGS84 coordinate system.
+#' @param coordinates A list or data frame of longitude latitude coordinates in WGS84 coordinate system.
 #' @param from A character with the start date in the format yyyy-mm-dd.
 #' @param to A character with the end date in the format yyyy-mm-dd.
 #' @docType methods
@@ -230,7 +239,9 @@ setMethod("getTimeSeries","WtssClient",
 #' objdesc = describeCoverages(obj,objlist)
 #' coordinates = list( c(longitude=-45, latitude=-12),  c(longitude=-54, latitude=-11))
 #' tsAll = getListOfTimeSeries(obj, coverages=objdesc, coordinates=coordinates, from="2004-01-01", to="2004-05-01")
-setGeneric("getListOfTimeSeries",function(object,coverages,datasets,coordinates,from,to){standardGeneric ("getListOfTimeSeries")})
+setGeneric("getListOfTimeSeries",function(object,coverages,datasets,coordinates,from,to){standardGeneric("getListOfTimeSeries")})
+
+#' @rdname  getListOfTimeSeries
 setMethod("getListOfTimeSeries","WtssClient",
           function(object,coverages,datasets,coordinates,from,to){
             if( is.data.frame(coordinates) | is.matrix(coordinates))
@@ -338,4 +349,10 @@ setMethod("getListOfTimeSeries","WtssClient",
                datasets = data.frame( timeline=as.Date(items$result$timeline), datasets.processed, stringsAsFactors = FALSE)) 
   )
 }
+
+
+
+
+
+
 
