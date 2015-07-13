@@ -3,6 +3,7 @@
 \usepackage[utf8]{inputenc}
 
 %\VignetteIndexEntry{How to}
+%\VignettePackage{rwtss}
 
 \begin{document}
 \SweaveOpts{concordance=TRUE}
@@ -72,9 +73,16 @@ head(df[,3:4])
 df$MOD09Q1.datasets.timeline <- as.Date(
   df$MOD09Q1.datasets.timeline, '%m/%d/%Y')
 
-plot(x = df$MOD09Q1.datasets.timeline, y = df$MOD09Q1.datasets.red, type = "l", col = "red", main = "MOD09Q1 - RED and NIR", xlab = "time", ylab = "Value")
-lines(x = df$MOD09Q1.datasets.timeline, y = df$MOD09Q1.datasets.nir, col = "dark red")
-
+plot(
+    x = df$MOD09Q1.datasets.timeline, 
+    y = df$MOD09Q1.datasets.red, 
+    type = "l", col = "red", 
+    main = "MOD09Q1 - RED and NIR", 
+    xlab = "time", ylab = "Value")
+lines(
+    x = df$MOD09Q1.datasets.timeline, 
+    y = df$MOD09Q1.datasets.nir, 
+    col = "dark red")
 @
 
 
