@@ -11,8 +11,16 @@
 .Rproj.user/
 .Rproj.user
 
-# Man fileis
+# Man files
 man/
 .Rd
 .Rd~
 README.md~
+
+# Vignete files
+vignettes/
+.pdf
+.log
+.tex
+.gz
+

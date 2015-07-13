@@ -1,0 +1,81 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+
+%\VignetteIndexEntry{How to}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+
+
+\title{How to use the WTSS client for R}
+\author{
+  Maus, Victor\\
+  \texttt{victor.maus@inpe.br}
+  \and
+  Sánchez, Alber\\
+  \texttt{alber.ipia@inpe.br}
+}
+
+
+\maketitle
+
+\section{Introduction}
+
+  The Web Time Series Service (WTSS) is a lightweight web service which is able to retrieve remote sensing imagery as time series. WTSS bridges the gap between remote sensing applications and their data-access through a simple representation of time series data. The service main goal is to bring to remote sensing research community an easy way for accessing and consuming satellite imagery data in the form of time series, saving researchers' time when dealing with a huge volume of data. 
+
+  This web service is integrated into \emph{R} thorugh the package \emph{RWTSS}. This document explains the basic functionality of the \emph{RWTSS} package.
+
+
+
+\section{Explore the service}
+
+  You can use the \emph{RWTSS} package to explore the contents of a \emph{WTSS}. For this, you need to create a client object by providing the URL of the service and then using the function for listing coverages:
+
+<<exploreListCoverages>>=
+library(rwtss)
+obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+objlist = listCoverages(obj)
+objlist
+@
+
+  Then, you can ask for a detailed description of any of the coverages provided by the service:
+
+<<exploreDescribeCoverages>>=
+objdesc = describeCoverages(obj,"MOD09Q1")
+objdesc
+@
+
+
+\section{Retrieve data}
+
+  To retrieve data, you need to specify the datasets, the position and the time interval you require:
+
+<<retrieveData>>=
+ds = datasets=c("nir","quality","red","evi2")
+lat = -12
+lon = -45
+start = "2004-01-01"
+end = "2004-05-01"
+ts1 = getTimeSeries(obj, 
+                    coverages = "MOD09Q1", 
+                    datasets = ds, 
+                    latitude = lat, longitude = lon, 
+                    from = start, to = end)
+df = as.data.frame(ts1)
+head(df[,3:4])
+@
+
+  The you can use the data as regular in R.
+<<retrieveData, fig=TRUE>>=
+df$MOD09Q1.datasets.timeline <- as.Date(
+  df$MOD09Q1.datasets.timeline, '%m/%d/%Y')
+
+plot(x = df$MOD09Q1.datasets.timeline, y = df$MOD09Q1.datasets.red, type = "l", col = "red", main = "MOD09Q1 - RED and NIR", xlab = "time", ylab = "Value")
+lines(x = df$MOD09Q1.datasets.timeline, y = df$MOD09Q1.datasets.nir, col = "dark red")
+
+@
+
+
+\end{document}
