@@ -34,7 +34,7 @@
 
   You can use the \emph{RWTSS} package to explore the contents of a \emph{WTSS}. For this, you need to create a client object by providing the URL of the service and then using the function for listing coverages:
 
-<<exploreListCoverages>>=
+<<exploreListCoverages, eval=FALSE>>=
 library(rwtss)
 obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
 objlist = listCoverages(obj)
@@ -43,7 +43,7 @@ objlist
 
   Then, you can ask for a detailed description of any of the coverages provided by the service:
 
-<<exploreDescribeCoverages>>=
+<<exploreDescribeCoverages, eval=FALSE>>=
 objdesc = describeCoverages(obj,"MOD09Q1")
 objdesc
 @
@@ -53,7 +53,7 @@ objdesc
 
   To retrieve data, you need to specify the datasets, the position and the time interval you require:
 
-<<retrieveData>>=
+<<retrieveData, eval=FALSE>>=
 ds = datasets=c("nir","quality","red","evi2")
 lat = -12
 lon = -45
@@ -69,7 +69,7 @@ head(df[,3:4])
 @
 
   The you can use the data as regular in R.
-<<retrieveData, fig=TRUE>>=
+<<retrieveData, eval=FALSE, fig=TRUE>>=
 df$MOD09Q1.datasets.timeline <- as.Date(
   df$MOD09Q1.datasets.timeline, '%m/%d/%Y')
 

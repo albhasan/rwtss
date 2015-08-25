@@ -60,7 +60,7 @@ setMethod (
 #' @docType methods
 #' @export
 #' @examples
-#' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
 wtssClient <- function(serverUrl){
   new (Class="WtssClient",serverUrl = serverUrl)
 }
@@ -111,8 +111,8 @@ setMethod("setServerUrl","WtssClient",
 #' @docType methods
 #' @export
 #' @examples
-#' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
-#' objlist = listCoverages(obj)
+#' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' #objlist = listCoverages(obj)
 setGeneric("listCoverages",function(object){standardGeneric ("listCoverages")})
 
 #' @rdname  listCoverages
@@ -132,7 +132,7 @@ setMethod("listCoverages","WtssClient",
     #request <- paste(url,"list_coverages?output_format=json",sep="")
     request <- paste(url,"product_list?output_format=json",sep="")
     while(class(items) == "try-error" & ce < 10) {
-      items <- try(fromJSON(try(getURL(request))))
+      items <- .parseJSON(.sendrequest(request))#items <- try(fromJSON(try(getURL(request))))
       ce <- ce + 1
     }
     if (class(items) == "try-error"){
@@ -153,8 +153,8 @@ setMethod("listCoverages","WtssClient",
 #' @docType methods
 #' @export
 #' @examples
-#' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
-#' objdesc = describeCoverages(obj,"MOD09Q1")
+#' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' #objdesc = describeCoverages(obj,"MOD09Q1")
 setGeneric("describeCoverages",function(object,coverages){standardGeneric("describeCoverages")})
 
 
@@ -177,7 +177,7 @@ setMethod("describeCoverages","WtssClient",
       #request <- paste(url,"describe_coverage?name=",cov,"&output_format=json",sep="")
       request <- paste(url,"dataset_list?product=",cov,"&output_format=json",sep="")
       while(class(items) == "try-error" & ce < 10) {
-        items <- try(fromJSON(try(getURL(request))))
+        items <- .parseJSON(.sendrequest(request))#items <- try(fromJSON(try(getURL(request))))
         ce <- ce + 1
       }
       if (class(items) == "try-error"){
@@ -208,10 +208,10 @@ setMethod("describeCoverages","WtssClient",
 #' @docType methods
 #' @export
 #' @examples
-#' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
-#' objlist = listCoverages(obj)
-#' objdesc = describeCoverages(obj,objlist)
-#' tsAll = getTimeSeries(obj, coverages=objdesc, longitude=-45, latitude=-12, from="2004-01-01", to="2004-05-01")
+#' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' #objlist = listCoverages(obj)
+#' #objdesc = describeCoverages(obj,objlist)
+#' #tsAll = getTimeSeries(obj, coverages=objdesc, longitude=-45, latitude=-12, from="2004-01-01", to="2004-05-01")
 setGeneric("getTimeSeries",function(object,coverages,datasets,longitude,latitude,from,to){standardGeneric("getTimeSeries")})
 
 #' @rdname  getTimeSeries
@@ -234,11 +234,11 @@ setMethod("getTimeSeries","WtssClient",
 #' @docType methods
 #' @export
 #' @examples
-#' obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
-#' objlist = listCoverages(obj)
-#' objdesc = describeCoverages(obj,objlist)
-#' coordinates = list( c(longitude=-45, latitude=-12),  c(longitude=-54, latitude=-11))
-#' tsAll = getListOfTimeSeries(obj, coverages=objdesc, coordinates=coordinates, from="2004-01-01", to="2004-05-01")
+#' #obj = wtssClient("http://www.dpi.inpe.br/mds/mds")
+#' #objlist = listCoverages(obj)
+#' #objdesc = describeCoverages(obj,objlist)
+#' #coordinates = list( c(longitude=-45, latitude=-12),  c(longitude=-54, latitude=-11))
+#' #tsAll = getListOfTimeSeries(obj, coverages=objdesc, coordinates=coordinates, from="2004-01-01", to="2004-05-01")
 setGeneric("getListOfTimeSeries",function(object,coverages,datasets,coordinates,from,to){standardGeneric("getListOfTimeSeries")})
 
 #' @rdname  getListOfTimeSeries
@@ -248,12 +248,10 @@ setMethod("getListOfTimeSeries","WtssClient",
               coordinates <- lapply(1:dim(coordinates)[1], function(i) coordinates[i,])
             if(!is.list(coordinates))
               stop("Missing a list. Please informe a list of longitude latitude coordinates in WGS84 coordinate system.")
-
             out <- lapply(coordinates, function(coords){
               longitude <- coords[1]
               latitude <- coords[2]
               items <- .getTimeSeries(object,coverages,datasets,longitude,latitude,from,to)
-              
             })
             return(out)
           }
@@ -261,7 +259,6 @@ setMethod("getListOfTimeSeries","WtssClient",
 
 .getTimeSeries <- function(object,coverages,datasets,longitude,latitude,from,to)
 {
-  
   if(missing(object))
     stop("Missing either a WtssClient object or a server URL.")
   
@@ -284,7 +281,7 @@ setMethod("getListOfTimeSeries","WtssClient",
                          "&latitude=",latitude,"&longitude=",longitude,
                          "&start=",from,"&end=",to,"&output_format=json",sep="")
         while(class(items) == "try-error" & ce < 10) {
-          items <- try(fromJSON(try(getURL(request))))
+          items <- .parseJSON(.sendrequest(request))#items <- try(fromJSON(try(getURL(request))))
           ce <- ce + 1
         }
         if (class(items) == "try-error"){
@@ -302,7 +299,7 @@ setMethod("getListOfTimeSeries","WtssClient",
                          "&latitude=",latitude,"&longitude=",longitude,
                          "&start=",from,"&end=",to,"&output_format=json",sep="")
         while(class(items) == "try-error" & ce < 10) {
-          items <- try(fromJSON(try(getURL(request))))
+          items <- .parseJSON(.sendrequest(request))#items <- try(fromJSON(try(getURL(request))))
           ce <- ce + 1
         }
         if (class(items) == "try-error"){
@@ -351,8 +348,25 @@ setMethod("getListOfTimeSeries","WtssClient",
 }
 
 
+.sendrequest <- function(request){
+  res = tryCatch({
+    getURL(request)
+  }, error = function(e) {
+    stop("ERROR: An error occurred while retrieving data.")
+  }, finally = {
+    print(paste("REQUEST SENT:", request, sep = " "))
+  })
+  return(res)
+}
 
-
-
-
+.parseJSON <- function(atext){
+  res = tryCatch({
+    fromJSON(atext)
+  }, error = function(e) {
+    stop(paste("ERROR: An error occurred while parsing JSON", e, sep = " - "))
+  }, finally = {
+    print(paste("INPUT TEXT:", atext, sep = " "))
+  })
+  return(res)
+}
 
