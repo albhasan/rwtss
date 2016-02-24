@@ -3,6 +3,11 @@ rwtss
 
 R client for Web Time Series Service (WTSS).
 
+<h1>NOTE:</h1>
+This project is now part of the <a href="https://github.com/e-sensing">e-sensing project<a> and it's been re-named as <a href="https://github.com/e-sensing/wtss.R">wtss.R<a>; please go there to obtain the latest releases and updates. The code in the page is no longer updated or modified, however, it is keep for legacy applications.  
+
+
+<h1>rwtss</h1>
 
 WTSS is a lightweight web service for handling remote sensing imagery as time series. Through a simple and effective representation for time series, this web service can be easily integrated into free and open source tools such as R, Python and web browser (through JavaScript).
 
@@ -45,4 +50,4 @@ A JavaScript client can be found at <a href="http://github.com/gqueiroz/wtss/">h
 	<li>Install the required packages <code>install.packages(c("roxygen2", "testthat"))</code>.</li>
 	<li>Go to the <i>Build</i> tab in the upper-right panel and press the button <i>Build & Reload</i>. After this the package is ready to use.</li>
 	<li>You can also create a source package: Go to the <i>Build</i> tab, display the menu <i>More</i> and select the option <i>Build Source Package</i>.</li>
-</ol> 
+</ol>
